@@ -19,21 +19,25 @@
   <div class="container">
 		<div class="header">Trivia Game</div>
 
-		<div class="trivia" id="trivia" correct="0" wrong="0" numQues="10">
-			<h1 class="question" id="question">What element has the symbol: ??</h1>
+		<div class="trivia" id="trivia" correct="0" wrong="0" num="0">
+			<h1 class="question" id="question">What element has the symbol: F ?</h1>
 			<div class="sel-box" id="sel_box">
-				<div class="sel-row">
-					<div class="selection" id="sel1">??</div>
-					<div class="selection" id="sel2">??</div>
+<!-- 				<div class="sel-row">
+					<div class="selection" id="sel1" isAnswer="0">Carbon</div>
+					<div class="selection" id="sel2" isAnswer="1">Fluorine</div>
 				</div>
 				<div class="sel-row">
-					<div class="selection" id="sel3">??</div>
-					<div class="selection" id="sel4">??</div>
-				</div>
+					<div class="selection" id="sel3" isAnswer="0">Oxygen</div>
+					<div class="selection" id="sel4" isAnswer="0">Chlorine</div>
+				</div> -->
 			</div>
 		</div>
 
-		<div class=results id="results">
+		<div class="stats" id="stats">
+			<div class="timer" id="timer" count="0" isRunning="false">5</div>
+			<div class="correct" id="correct">Correct: 0</div>
+			<div class="wrong" id="wrong">Wrong: 0</div>
+			<div class="num" id="num">Num: 0</div>
 		</div>
   </div>
 

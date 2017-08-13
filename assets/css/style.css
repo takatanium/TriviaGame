@@ -30,6 +30,11 @@ p {
   margin: 10px 0 10px 0;
 }
 
+button {
+  width: 100px;
+  margin: auto;
+}
+
 .container {
   display: flex;
   flex-direction: column;

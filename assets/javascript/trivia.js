@@ -1,7 +1,9 @@
 $(document).ready(function(){
 
-	//load in question
-	display.question();
+	$('#reset').on('click', function(){
+		game.reset();
+		display.question();
+	});
 
 });
 
@@ -17,9 +19,11 @@ var game = {
 		$('#trivia').attr('correct', correct);
 		$('#correct').html("Correct: " + correct);
 	},
-	incWrong: function() {
+	incWrong: function(num) {
 		var wrong = parseInt($('#trivia').attr("wrong"));
-		wrong++;
+		if (num !== "-1") {
+			wrong++;
+		}
 		$('#trivia').attr("wrong", wrong);
 		$('#wrong').html("Wrong: " + wrong);
 	},
@@ -43,7 +47,7 @@ var timer = {
 			$('#timer').text(sec - count);
 
 			if (count >= sec+1) {
-				currentPage === "answer" ? display.question() : display.answer("0");
+				currentPage === "answer" ? display.question() : display.answer("-1");
 			}
 		}, 1000));
 	},
@@ -56,7 +60,6 @@ var display = {
 	question: function() {
 		timer.stop();
 		parseInt($('#trivia').attr("num")) > 4 ? this.stats() : this.callQuestion();
-	
 	},
 	callQuestion: function() {
 		game.incNum();
@@ -64,13 +67,12 @@ var display = {
 		//display random question
 		var question = trivia.questions[tools.getRandom(trivia.questions.length)];
     eval('trivia.'+question+'()');
-    // trivia.member();
 
 		timer.start(5, "question");
 	},
 	answer: function(correct) {
 		timer.stop();
-		correct === "1" ? game.incCorrect() : game.incWrong();
+		correct === "1" ? game.incCorrect() : game.incWrong(correct);
 
 		for (var i = 1; i <= 4; i++) {
 			// $('#sel'+i).append(" - " + $('#sel'+i).attr('mark'));
@@ -89,10 +91,18 @@ var display = {
 		$('#timer').text("--");
 		var percentCorrect = (parseInt($('#trivia').attr('correct'))/parseInt($('#trivia').attr('num'))) * 100;
 		var percentWrong = (parseInt($('#trivia').attr('wrong'))/parseInt($('#trivia').attr('num'))) * 100;
+		var percentAnswered = (parseInt($('#trivia').attr('correct'))+parseInt($('#trivia').attr('wrong')))/parseInt($('#trivia').attr('num')) * 100;
 
 		$('#trivia').html("<h1>Statistics</h1>");
 		$('#trivia').append("<p>Correct: " + percentCorrect + "%</p>");
 		$('#trivia').append("<p>Wrong: " + percentWrong + "%</p>");
+		$('#trivia').append("<p>Unanswered: " + (100-percentAnswered) + "%</p>");
+		$('#trivia').append("<button id='reset'>Restart</button>");
+		$('#reset').on('click', function(){
+			game.reset();
+			display.question();
+		});
+
 	},
 	attachClicks: function() {
 		$('#sel1').on('click', function() {

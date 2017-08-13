@@ -11,9 +11,9 @@ var tools = {
 
   getMaxAttrIndex: function(arr, key) {
 		var res = Math.max.apply(Math,arr.map(function(o){return o[key];}))
-		console.log(res);
-		return arr.findIndex(function(o){ return o.radius == res; })
+		return arr.findIndex(function(o){ return o[key] == res; })
   },
+
   shuffle: function(arr) {
     var j, x, i;
     for (i = arr.length; i; i--) {

@@ -2,6 +2,9 @@ $(document).ready(function(){
 
 	$('#reset').on('click', function(){
 		game.reset();
+		var maxNum = $('#number_questions').val();
+		maxNum === "" ? maxNum = 4 : maxNum = parseInt($('#number_questions').val())-1;
+		$('#trivia').attr('maxNum', maxNum);
 		display.question();
 	});
 
@@ -12,6 +15,8 @@ var game = {
 		$('#trivia').attr('correct', "0");
 		$('#trivia').attr("wrong", "0");
 		$('#trivia').attr("num", "0");
+		$('#correct').html("Correct: 0");
+		$('#wrong').html("Wrong: 0");
 	},
 	incCorrect: function() {
 		var correct = parseInt($('#trivia').attr("correct"));
@@ -30,8 +35,9 @@ var game = {
 	incNum: function() {
 		var num = parseInt($('#trivia').attr("num"));
 		num++;
+		var maxNum = parseInt($('#trivia').attr('maxNum'))+1;
 		$('#trivia').attr("num", num);
-		$('#num').html("Num: " + num);
+		$('#num').html(num + " / " + maxNum);
 	}
 }
 
@@ -59,7 +65,8 @@ var timer = {
 var display = {
 	question: function() {
 		timer.stop();
-		parseInt($('#trivia').attr("num")) > 4 ? this.stats() : this.callQuestion();
+		var maxNum = $('#trivia').attr('maxNum');
+		parseInt($('#trivia').attr("num")) > maxNum ? this.stats() : this.callQuestion();
 	},
 	callQuestion: function() {
 		game.incNum();
@@ -68,14 +75,13 @@ var display = {
 		var question = trivia.questions[tools.getRandom(trivia.questions.length)];
     eval('trivia.'+question+'()');
 
-		timer.start(5, "question");
+		timer.start(8, "question");
 	},
 	answer: function(correct) {
 		timer.stop();
 		correct === "1" ? game.incCorrect() : game.incWrong(correct);
 
 		for (var i = 1; i <= 4; i++) {
-			// $('#sel'+i).append(" - " + $('#sel'+i).attr('mark'));
 			$('#sel'+i).html('<h2>' + tools.capFirst($('#sel'+i).attr('name')) + '</h2>');
 			$('#sel'+i).append('<p>' + $('#sel'+i).attr('mark') + '</p>');
 			$('.selection').css('line-height', '30px');
@@ -89,9 +95,9 @@ var display = {
 	},
 	stats: function() {
 		$('#timer').text("--");
-		var percentCorrect = (parseInt($('#trivia').attr('correct'))/parseInt($('#trivia').attr('num'))) * 100;
-		var percentWrong = (parseInt($('#trivia').attr('wrong'))/parseInt($('#trivia').attr('num'))) * 100;
-		var percentAnswered = (parseInt($('#trivia').attr('correct'))+parseInt($('#trivia').attr('wrong')))/parseInt($('#trivia').attr('num')) * 100;
+		var percentCorrect = Math.round((parseInt($('#trivia').attr('correct'))/parseInt($('#trivia').attr('num'))) * 100);
+		var percentWrong = Math.round((parseInt($('#trivia').attr('wrong'))/parseInt($('#trivia').attr('num'))) * 100);
+		var percentAnswered = Math.round((parseInt($('#trivia').attr('correct'))+parseInt($('#trivia').attr('wrong')))/parseInt($('#trivia').attr('num')) * 100);
 
 		$('#trivia').html("<h1>Statistics</h1>");
 		$('#trivia').append("<p>Correct: " + percentCorrect + "%</p>");
@@ -110,26 +116,34 @@ var display = {
 			if ($('#sel1').attr('isAnswer')==="0") {
 				$('#sel1').css('background-color', '#DC143C');
 			}
+			display.unbindClicks();
 		});
 		$('#sel2').on('click', function() {
 			display.answer($('#sel2').attr('isAnswer'));
 			if ($('#sel2').attr('isAnswer')==="0") {
 				$('#sel2').css('background-color', '#DC143C');
 			}
+			display.unbindClicks();
 		});
 		$('#sel3').on('click', function() {
 			display.answer($('#sel3').attr('isAnswer'));
 			if ($('#sel3').attr('isAnswer')==="0") {
 				$('#sel3').css('background-color', '#DC143C');
 			}
+			display.unbindClicks();
 		});
 		$('#sel4').on('click', function() {
 			display.answer($('#sel4').attr('isAnswer'));
 			if ($('#sel4').attr('isAnswer')==="0") {
 				$('#sel4').css('background-color', '#DC143C');
 			}
+			display.unbindClicks();
 		});
 	},
+	unbindClicks: function() {
+		$('.selection').off('click');
+		$('.selection').removeClass('sel-hover');
+	}
 }
 
 var trivia = {
@@ -145,6 +159,7 @@ var trivia = {
 
 		for (var i = 1; i <= 4; i++) {
 			var sel = $('<div>').addClass('selection').attr('id', 'sel' + i);
+			sel.addClass('sel-hover');
 			sel.text(tools.capFirst(arr[i-1].name));
 			sel.attr('mark', arr[i-1].symbol);
 			sel.attr('name', arr[i-1].name);
@@ -176,6 +191,7 @@ var trivia = {
 
 		for (var i = 1; i <= 4; i++) {
 			var sel = $('<div>').addClass('selection').attr('id', 'sel' + i);
+			sel.addClass('sel-hover');
 			sel.text(tools.capFirst(arr[i-1].name));
 			sel.attr('mark', arr[i-1].number);
 			sel.attr('name', arr[i-1].name);
@@ -207,6 +223,7 @@ var trivia = {
 
 		for (var i = 1; i <= 4; i++) {
 			var sel = $('<div>').addClass('selection').attr('id', 'sel' + i);
+			sel.addClass('sel-hover');
 			sel.text(tools.capFirst(arr[i-1].name));
 			sel.attr('mark', arr[i-1].radius);
 			sel.attr('name', arr[i-1].name);
@@ -238,6 +255,7 @@ var trivia = {
 
 		for (var i = 1; i <= 4; i++) {
 			var sel = $('<div>').addClass('selection').attr('id', 'sel' + i);
+			sel.addClass('sel-hover');
 			sel.text(tools.capFirst(arr[i-1].name));
 			sel.attr('name', arr[i-1].name);
 			sel.attr('mark', arr[i-1].eleneg);
@@ -269,6 +287,7 @@ var trivia = {
 
 		for (var i = 1; i <= 4; i++) {
 			var sel = $('<div>').addClass('selection').attr('id', 'sel' + i);
+			sel.addClass('sel-hover');
 			sel.text(tools.capFirst(arr[i-1].name));
 			sel.attr('name', arr[i-1].name);
 			sel.attr('mark', arr[i-1].eleaff);
@@ -300,6 +319,7 @@ var trivia = {
 
 		for (var i = 1; i <= 4; i++) {
 			var sel = $('<div>').addClass('selection').attr('id', 'sel' + i);
+			sel.addClass('sel-hover');
 			sel.text(tools.capFirst(arr[i-1].name));
 			sel.attr('name', arr[i-1].name);
 			sel.attr('mark', arr[i-1].member);
@@ -329,6 +349,7 @@ var trivia = {
 
 		for (var i = 1; i <= 4; i++) {
 			var sel = $('<div>').addClass('selection').attr('id', 'sel' + i);
+			sel.addClass('sel-hover');
 			sel.text(tools.capFirst(arr[i-1].name));
 			sel.attr('name', arr[i-1].name);
 			sel.attr('mark', arr[i-1].radioactive);
@@ -373,7 +394,6 @@ var trivia = {
 			}
 			else {i--;}
 		}
-		console.log(arr.length);
 		return arr;
 	},
 	getUniqueBool: function(num, key) {

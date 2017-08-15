@@ -33,6 +33,7 @@ p {
 button {
   width: 100px;
   margin: auto;
+  margin-top: 20px;
 }
 
 .container {
@@ -81,7 +82,7 @@ button {
   cursor: hand;
 }
 
-.selection:hover {
+.sel-hover:hover {
   background-color: #FAFAD2;
 }
 
@@ -108,3 +109,8 @@ button {
   border: 0;
 }
 
+#number_questions {
+  width: 210px;
+  margin: auto;
+  margin-bottom: 20px;
+}

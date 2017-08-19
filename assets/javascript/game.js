@@ -74,8 +74,7 @@ var display = {
 
 		//display random question
 		var question = trivia.questions[tools.getRandom(trivia.questions.length)];
-    // eval('trivia.'+question+'()');
-    trivia.eleaff();
+    eval('trivia.'+question+'()');
 
 		timer.start(8, "question");
 	},
@@ -114,7 +113,7 @@ var display = {
 		div.append("<p>Wrong: " + percentWrong + "%</p>");
 		div.append("<p>Unanswered: " + (100-percentAnswered) + "%</p>");
 
-		var btn = $('<button>').attr('id', 'reset').text("Reset");
+		var btn = $('<button>').attr('id', 'reset').text("Again?");
 		btn.on('click', function(){
 			game.reset();
 			display.question();

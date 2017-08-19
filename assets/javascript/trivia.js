@@ -5,7 +5,7 @@ var trivia = {
 
 		//randomly choose a correct answer
 		correctIndex = tools.getRandom(4);
-		var selBox = trivia.makeBoxes(arr, "symbol", correctIndex);
+		var selBox = display.makeBoxes(arr, "symbol", correctIndex);
 
 		var question = $('<h1>').addClass('question').attr('id', 'question');
 		question.html('What element has the symbol: ' + arr[correctIndex].symbol);
@@ -21,7 +21,7 @@ var trivia = {
 
 		//randomly choose a correct answer
 		correctIndex = tools.getRandom(4);
-		var selBox = trivia.makeBoxes(arr, "number", correctIndex);
+		var selBox = display.makeBoxes(arr, "number", correctIndex);
 
 		var question = $('<h1>').addClass('question').attr('id', 'question');
 		question.html('What element has the atomic number: ' + arr[correctIndex].number);
@@ -37,7 +37,7 @@ var trivia = {
 
 		//assign correct
 		correctIndex = tools.getMaxAttrIndex(arr, "radius");
-		var selBox = trivia.makeBoxes(arr, "radius", correctIndex);
+		var selBox = display.makeBoxes(arr, "radius", correctIndex);
 
 		var question = $('<h1>').addClass('question').attr('id', 'question');
 		question.html('Which element is largest?');
@@ -53,7 +53,7 @@ var trivia = {
 
 		//assign correct
 		correctIndex = tools.getMaxAttrIndex(arr, "eleneg");
-		var selBox = trivia.makeBoxes(arr, "eleneg", correctIndex);
+		var selBox = display.makeBoxes(arr, "eleneg", correctIndex);
 
 		var question = $('<h1>').addClass('question').attr('id', 'question');
 		question.html('Which element has the greatest electronegativity?');
@@ -69,7 +69,7 @@ var trivia = {
 
 		//assign correct
 		correctIndex = tools.getMaxAttrIndex(arr, "eleaff");
-		var selBox = trivia.makeBoxes(arr, "eleaff", correctIndex);
+		var selBox = display.makeBoxes(arr, "eleaff", correctIndex);
 
 		var question = $('<h1>').addClass('question').attr('id', 'question');
 		question.html('Which element has the greatest electron affinity?');
@@ -85,7 +85,7 @@ var trivia = {
 
 		//randomly choose a correct answer
 		correctIndex = tools.getRandom(4);
-		var selBox = trivia.makeBoxes(arr, "member", correctIndex);
+		var selBox = display.makeBoxes(arr, "member", correctIndex);
 
 		var memberType = arr[correctIndex].member;
 		var question = $('<h1>').addClass('question').attr('id', 'question');
@@ -99,8 +99,8 @@ var trivia = {
 	radioactive: function() {
 		//randomly get four elements
 		var arr = this.getUniqueBool(4, "radioactive");
-		
-		var selBox = trivia.makeBoxes(arr, "radioactive", 0);
+
+		var selBox = display.makeBoxes(arr, "radioactive", 0);
 		var question = $('<h1>').addClass('question').attr('id', 'question');
 		question.html('Which element is radioactive?');
 
@@ -159,31 +159,5 @@ var trivia = {
 
 		return tools.shuffle(arr);
 	},
-	questions: ["symbol", "number", "radius", "radioactive", "eleneg", "eleaff", "member"],
-	makeBoxes: function(arr, key, correctIndex) {
-
-		var selRow1 = $('<div>').addClass('sel-row');
-		var selRow2 = $('<div>').addClass('sel-row');
-
-		for (var i = 1; i <= 4; i++) {
-			var sel = $('<div>').addClass('selection').attr('id', 'sel' + i);
-			sel.addClass('sel-hover');
-			sel.text(tools.capFirst(arr[i-1].name));
-			sel.attr('name', arr[i-1].name);
-			sel.attr('mark', arr[i-1][key]);
-			if (key === "radioactive") {
-				arr[i-1][key] ? sel.attr('isAnswer', '1') : sel.attr('isAnswer', '0');
-			}
-			else {
-				(i-1) === correctIndex ? sel.attr('isAnswer', '1') : sel.attr('isAnswer', '0');
-			}
-			i < 3 ? selRow1.append(sel) : selRow2.append(sel);
-		}
-
-		var selBox = $('<div>').addClass('sel-box').attr('id', 'sel_box');
-		selBox.append(selRow1);
-		selBox.append(selRow2);
-
-		return selBox;
-	}
+	questions: ["symbol", "number", "radius", "radioactive", "eleneg", "eleaff", "member"]
 }

@@ -122,6 +122,31 @@ var display = {
 
 		$('#trivia').append(div);
 	},
+	makeBoxes: function(arr, key, correctIndex) {
+		var selRow1 = $('<div>').addClass('sel-row');
+		var selRow2 = $('<div>').addClass('sel-row');
+
+		for (var i = 1; i <= 4; i++) {
+			var sel = $('<div>').addClass('selection').attr('id', 'sel' + i);
+			sel.addClass('sel-hover');
+			sel.text(tools.capFirst(arr[i-1].name));
+			sel.attr('name', arr[i-1].name);
+			sel.attr('mark', arr[i-1][key]);
+			if (key === "radioactive") {
+				arr[i-1][key] ? sel.attr('isAnswer', '1') : sel.attr('isAnswer', '0');
+			}
+			else {
+				(i-1) === correctIndex ? sel.attr('isAnswer', '1') : sel.attr('isAnswer', '0');
+			}
+			i < 3 ? selRow1.append(sel) : selRow2.append(sel);
+		}
+
+		var selBox = $('<div>').addClass('sel-box').attr('id', 'sel_box');
+		selBox.append(selRow1);
+		selBox.append(selRow2);
+
+		return selBox;
+	},
 	attachClicks: function() {
 		for (var i = 1; i <= 4; i++) {
 			$('#sel'+i).on('click', function() {
